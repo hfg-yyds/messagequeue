@@ -1,11 +1,14 @@
 package com.hfg.confg;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Zero
@@ -36,9 +39,15 @@ public class KafkaConfig {
      * 获取到kafka消费对象
      * @return KafkaConsumer
      */
-    public static KafkaConsumer<Integer,String> getKafkaConsumer() {
-
-        return null;
+    public static KafkaConsumer<String,String> getKafkaConsumer() {
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.88.128:9092");
+        configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        // group.id很重要
+        configs.put(ConsumerConfig.GROUP_ID_CONFIG, "mygrp1");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(configs);
+        return consumer;
     }
 
 
